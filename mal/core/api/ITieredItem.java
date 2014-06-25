@@ -6,4 +6,10 @@ public interface ITieredItem {
 	
 	public double getInsulationTier();
 	public double getConductionTier();
+
+	int getX();
+
+	int getY();
+
+	int getZ();
 }
