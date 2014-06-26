@@ -217,7 +217,7 @@ public class VersionInfo {
 						MalLogger.addChatMessage(VersionInfo.this.player, "This update is for Minecraft " + VersionInfo.this.latestMCVersion + ".");
 					}
 				}
-				else if(MalCore.VERBOSEMODE)
+				/*else if(MalCore.VERBOSEMODE)
 				{
 					MalLogger.addChatMessage(VersionInfo.this.player, "The current version of " + VersionInfo.this.modName + " is: " + VersionInfo.this.getCurrentVersion() + ".");
 					MalLogger.addChatMessage(VersionInfo.this.player, "The latest version is: " + VersionInfo.this.latestVersion + ".");
@@ -231,7 +231,7 @@ public class VersionInfo {
 						VersionInfo.this.newMCVersion = true;
 						MalLogger.addChatMessage(VersionInfo.this.player, "This update is for Minecraft " + VersionInfo.this.latestMCVersion + ".");
 					}
-				}
+				}*/
 
 			}
 			catch (Exception e)

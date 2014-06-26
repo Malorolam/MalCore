@@ -78,14 +78,23 @@ public abstract class TileEntityMultiblockSlave extends TileEntity implements II
 		mx = nbt.getInteger("masterX");
 		my = nbt.getInteger("masterY");
 		mz = nbt.getInteger("masterZ");
+	}
+	
+	
+	@Override
+	public void updateEntity()
+	{
+		super.updateEntity();
 		
-		if(mx==1000 && my==1000 && mz==1000)
-			return;
-		
-		if(worldObj.getTileEntity(mx, my, mz) != null && worldObj.getTileEntity(mx, my, mz) instanceof ITileEntityMultiblock)
-			masterEntity = (ITileEntityMultiblock)worldObj.getTileEntity(mx, my, mz);
-		else
-			masterEntity = null;
+		if(worldObj != null && !loaded)
+		{
+			TileEntity te = worldObj.getTileEntity(this.getX()+mx, this.getY()+my, this.getZ()+mz);
+			if(te instanceof ITileEntityMultiblock)
+			{
+				this.masterEntity = (ITileEntityMultiblock) te;
+				loaded = true;
+			}
+		}
 	}
 	
 	public void InitMultiblock(TileEntity te)

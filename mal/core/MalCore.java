@@ -3,6 +3,7 @@ package mal.core;
 import java.lang.annotation.Annotation;
 
 import mal.core.network.MalCorePacketHandler;
+import mal.core.tileentity.TileEntityMultiblockSlave;
 import mal.core.util.MalEvents;
 import mal.core.util.ModList;
 import mal.core.version.VersionInfo;
@@ -10,6 +11,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = MalCore.MODID, version = MalCore.VERSION)
 public class MalCore {
@@ -24,7 +26,9 @@ public class MalCore {
     	FMLCommonHandler.instance().bus().register(new MalEvents());
     	MalCorePacketHandler.init();
     	
-    	ModList.addMod(this);
+    	GameRegistry.registerTileEntity(TileEntityMultiblockSlave.class, "TileEntityMultiblockSlave");
+    	
+    	ModList.addMod(this.MODID, this.VERSION, VersionURL);
     }
 
 }
