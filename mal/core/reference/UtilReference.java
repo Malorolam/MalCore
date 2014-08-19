@@ -213,7 +213,7 @@ public class UtilReference {
                 }
                 flag = true;
             }
-            else if (areItemStacksEqualItem(itemstack1, par1ItemStack))
+            else if (areItemStacksEqualItem(itemstack1, par1ItemStack, true, true))
             {
                 int max = Math.min(par1ItemStack.getMaxStackSize(), par0IInventory.getInventoryStackLimit());
                 if (max > itemstack1.stackSize)
@@ -240,9 +240,15 @@ public class UtilReference {
         return !par0IInventory.isItemValidForSlot(par2, par1ItemStack) ? false : !(par0IInventory instanceof ISidedInventory) || ((ISidedInventory)par0IInventory).canInsertItem(par2, par1ItemStack, par3);
     }
     
-    public static boolean areItemStacksEqualItem(ItemStack par0ItemStack, ItemStack par1ItemStack)
+    public static boolean areItemStacksEqualItem(ItemStack is1, ItemStack is2, boolean considerDamage, boolean considerNBT)
     {
-        return Item.getIdFromItem(par0ItemStack.getItem()) != Item.getIdFromItem(par1ItemStack.getItem()) ? false : (par0ItemStack.getItemDamage() != par1ItemStack.getItemDamage() ? false : (par0ItemStack.stackSize > par0ItemStack.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(par0ItemStack, par1ItemStack)));
+    	if(Item.getIdFromItem(is1.getItem()) != Item.getIdFromItem(is2.getItem()))
+    		return false;
+    	if(considerDamage && is1.getItemDamage() != is2.getItemDamage())
+    		return false;
+    	if(considerNBT && !ItemStack.areItemStackTagsEqual(is1, is2))
+    		return false;
+    	return true;
     }
 }
 /*******************************************************************************
