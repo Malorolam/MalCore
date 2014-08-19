@@ -61,3 +61,11 @@ public class MalCore {
     	CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(guidebookItem), new Object[]{Items.book, new ItemStack(Items.coal,1,0)}));
     }
 }
+/*******************************************************************************
+* Copyright (c) 2014 Malorolam.
+* 
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the included license, which is also
+* available at http://carbonization.wikispaces.com/License
+* 
+*********************************************************************************/
