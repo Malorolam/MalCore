@@ -1,5 +1,6 @@
 package mal.core.multiblock;
 
+import mal.core.reference.UtilReference;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
@@ -176,8 +177,8 @@ public class MultiBlockMatcher {
 						if(test_pattern[i][j][k].compare(exceptionBlock,false) && count<exceptionCount)
 						{
 							count++;
-							//System.out.println("Compare process bypassed substituted block ID: " + exceptionBlock.blockID + ", metadata: " + exceptionBlock.data
-							//		+ "; instances bypassed: "+count+"/"+exceptionCount+".");
+							System.out.println("Compare process bypassed substituted block ID: " + UtilReference.getBlockID(exceptionBlock.block) + ", metadata: " + exceptionBlock.data
+									+ "; instances bypassed: "+count+"/"+exceptionCount+".");
 								
 						}
 						else
@@ -197,7 +198,7 @@ public class MultiBlockMatcher {
 					}
 
 				}
-		//System.out.println("Compare process completed with success.");
+		System.out.println("Compare process completed with success.");
 		return true;
 	}
 	
@@ -376,7 +377,7 @@ public class MultiBlockMatcher {
 	 */
 	public boolean buildBasedHollowSolid(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block block1, int data1, Block block2, int data2, int wallThickness)
 	{
-		if(block1.equals(block2) && data1==data2)
+		if(UtilReference.getBlockID(block1) == UtilReference.getBlockID(block2) && data1==data2)
 			return buildHollowSolid(minX, minY, minZ, maxX, maxY, maxZ, block1, data1, wallThickness);
 		
 		boolean succ = buildHollowSolid(minX, minY, minZ, maxX, maxY, maxZ, block1, data1, wallThickness);

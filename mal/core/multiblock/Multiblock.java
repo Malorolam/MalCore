@@ -1,5 +1,6 @@
 package mal.core.multiblock;
 
+import mal.core.reference.UtilReference;
 import net.minecraft.block.Block;
 //Stores a block and it's location, as well as it's tier if it's one of the valid multiblock blocks
 import net.minecraft.item.ItemStack;
@@ -107,21 +108,21 @@ public class Multiblock {
 		
 		if(matchMaterial)
 		{
-			if(this.block.equals(multiblock.block) && this.baseMaterial == multiblock.baseMaterial && this.secondaryMaterial == multiblock.secondaryMaterial
+			if(UtilReference.getBlockID(block) == UtilReference.getBlockID(multiblock.block) && this.baseMaterial == multiblock.baseMaterial && this.secondaryMaterial == multiblock.secondaryMaterial
 					&& this.purpose == multiblock.purpose)
 				return true;
 		}
 		else
-			if(this.block.equals(multiblock.block))
+			if(UtilReference.getBlockID(block) == UtilReference.getBlockID(multiblock.block))
 			{
-				if(this.isMetadata || multiblock.isMetadata)
+				if(this.isMetadata && multiblock.isMetadata)
 				{
-					//if(this.purpose==-1 || multiblock.purpose == -1)
+					if(data == multiblock.data)
 						return true;
 				}
 				else
 				{
-					if(this.purpose == multiblock.purpose)
+					if(purpose == multiblock.purpose)
 						return true;
 				}
 			}

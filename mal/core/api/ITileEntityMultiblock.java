@@ -5,8 +5,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.IFluidHandler;
 
-public interface ITileEntityMultiblock extends IInventory, net.minecraft.inventory.ISidedInventory{
+public interface ITileEntityMultiblock extends IInventory, net.minecraft.inventory.ISidedInventory, IFluidHandler{
 
 	public abstract void activate(World world, int x, int y, int z, EntityPlayer par5EntityPlayer);
 	

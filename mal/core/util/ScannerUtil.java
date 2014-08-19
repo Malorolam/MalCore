@@ -269,6 +269,11 @@ public class ScannerUtil {
 		if(block.getBlockHardness(world, x, y, z) == -1.0f)
 			return -6;
 		
+		//making a bit of assumptions here, but let's assume that a metadata greater than 15 is carried over from some 
+		//item compression like used in the structure blocks, so get the metadata from the world directly in this case
+		if(metadata>15)
+			metadata = world.getBlockMetadata(x, y, z);
+		
 		int level = block.getHarvestLevel(metadata);
 		String tool = block.getHarvestTool(metadata);
 		if(tool == null)//no mapping tools

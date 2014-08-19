@@ -6,9 +6,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import mal.carbonization.tileentity.TileEntityMultiblockInit;
+import mal.core.api.ITieredItem;
 import mal.core.api.ITileEntityMultiblock;
+import mal.core.reference.UtilReference;
+import mal.core.tileentity.ITileEntityMultiblockSlave;
 import mal.core.tileentity.TileEntityMultiblockMaster;
-import mal.core.tileentity.TileEntityMultiblockSlave;
 import mal.core.util.MalLogger;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -81,7 +83,7 @@ public class MultiBlockInstantiator {
 		else//we are sad and have to do lots of calculations now :[
 			sideAxis = -1;
 		
-		//System.out.println(sideAxis);
+		System.out.println("sideAxis: " + sideAxis);
 		
 		//now we have limited the options to hopefully 2 planes to iterate through
 		//We loop through the two axises that are used
@@ -192,7 +194,7 @@ public class MultiBlockInstantiator {
 		createWorldMultiBlock(test_matcher, x-offset[0], y-offset[1], z-offset[2], pattern.length, pattern[0].length, pattern[0][0].length, world);
 		Multiblock[][][] ipattern = test_matcher.getPattern();
 		
-		if(Side.SERVER == FMLCommonHandler.instance().getEffectiveSide())
+		if(!world.isRemote)
 		{
 			world.setBlock(x, y, z, masterBlock);
 			TileEntityMultiblockMaster te = null;
@@ -209,34 +211,39 @@ public class MultiBlockInstantiator {
 			}
 	
 			double[] eff = new double[2];
+			int cnt = 0;
 			
 			for(int i = 0; i<pattern.length; i++) {
 				for(int j=0;j<pattern[0].length;j++) {
 					for(int k=0;k<pattern[0][0].length;k++)
 					{
-						if(world.getBlock(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k) == masterBlock)
+						if(UtilReference.getBlockID(world.getBlock(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k)) == UtilReference.getBlockID(masterBlock))
 						{
 							//we do this above, so just chill
+							//System.out.println("Skipped master block");
 						}
-						else if(pattern[i][j][k].compare(new Multiblock(slaveBlock,pattern[i][j][k].data, pattern[i][j][k].getTier(), false, false), false))
+						else if(pattern[i][j][k].compare(ipattern[i][j][k], false) && !world.isAirBlock(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k))
 						{
 							TileEntity mte = world.getTileEntity(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k);
-							if(mte instanceof TileEntityMultiblockSlave)
+							if(mte instanceof ITieredItem)
 							{
-								((TileEntityMultiblockSlave)mte).InitMultiblock(te);
-								eff[0] += ((TileEntityMultiblockSlave)mte).getInsulationTier();
-								eff[1] += ((TileEntityMultiblockSlave)mte).getConductionTier();
+								//((TileEntityMultiblockSlave)mte).InitMultiblock(te);
+								eff[0] += ((ITieredItem)mte).getInsulationTier();
+								eff[1] += ((ITieredItem)mte).getConductionTier();
+								cnt++;
 							}
 							else
 								MalLogger.addLogMessage("Tile Entity at index: " + i + ", " + j + ", " + k + " not a Multiblock slave block.");
 						}
+/*						else
+							System.out.println("blocks not the same");*/
 					}
 				}
 			}
 			if(te != null)
 			{
-				eff[0]=eff[0]/mbMatch.getSize(false);
-				eff[1]=eff[1]/mbMatch.getSize(false);
+				eff[0]=eff[0]/cnt;
+				eff[1]=eff[1]/cnt;
 				te.initilize(new Object[]{pattern.length, pattern[0].length, pattern[0][0].length, offset[0], offset[1], offset[2], eff[0], eff[1]});
 			}
 		}
@@ -259,7 +266,10 @@ public class MultiBlockInstantiator {
 				for(int j=0;j<pattern[0].length;j++) {
 					for(int k=0;k<pattern[0][0].length;k++)
 					{
-						world.setBlock(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k, block, 0, 2);
+						if(block!=null)
+							world.setBlock(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k, block, 0, 2);
+						else
+							world.setBlockToAir(x-offset[0]+i, y-offset[1]+j, z-offset[2]+k);
 					}
 				}
 			}
@@ -277,7 +287,10 @@ public class MultiBlockInstantiator {
 	{
 		if(Side.SERVER == FMLCommonHandler.instance().getEffectiveSide())
 		{
-			world.setBlock(x, y, z, block, 0, 2);
+			if(block != null)
+				world.setBlock(x, y, z, block, 0, 2);
+			else
+				world.setBlockToAir(x, y, z);
 			return true;
 		}
 		
@@ -293,7 +306,7 @@ public class MultiBlockInstantiator {
 		//go through the volume and reset everyone
 		//if(Side.SERVER == FMLCommonHandler.instance().getEffectiveSide())
 		{
-				//System.out.println("Master Revert");
+				System.out.println("Master Revert");
 				for(int i = 0; i<xsize;i++)
 				{
 					for(int j=0; j<ysize; j++)
@@ -307,9 +320,9 @@ public class MultiBlockInstantiator {
 							
 							if(te instanceof ITileEntityMultiblock)
 							{
-								if(te instanceof TileEntityMultiblockSlave)
+								if(te instanceof ITileEntityMultiblockSlave)
 								{
-									((TileEntityMultiblockSlave) te).setMaster(null);
+									((ITileEntityMultiblockSlave) te).setMaster(null);
 								}
 								else if(te instanceof TileEntityMultiblockMaster)
 								{
@@ -322,11 +335,11 @@ public class MultiBlockInstantiator {
 										//System.out.println("making backup nbt");
 										//NBTTagCompound nbt = ((TileEntityMultiblockFurnace)te).saveInventory();
 										((TileEntityMultiblockMaster)te).dumpInventory();//dump the inventories out
-										worldObj.setBlock(xCoord, yCoord, zCoord, masterBlock, 0, 2);
+										worldObj.setBlock(xCoord, yCoord, zCoord, masterBlock, 0, 3);
 						    			TileEntity tte = worldObj.getTileEntity(xCoord, yCoord, zCoord);
 						    			if(tte instanceof TileEntityMultiblockInit)
 						    				((TileEntityMultiblockInit) tte).initData(((TileEntityMultiblockMaster) te).getXSize(), ((TileEntityMultiblockMaster) te).getYSize(), ((TileEntityMultiblockMaster) te).getZSize(), offset, ((TileEntityMultiblockMaster)te).getType());
-						    			else if (tte instanceof TileEntityMultiblockSlave)
+						    			else if (tte instanceof ITileEntityMultiblockSlave)
 						    				System.out.println("wat...");
 						    			else
 						    			{
@@ -341,7 +354,7 @@ public class MultiBlockInstantiator {
 							}
 							else
 							{
-								//System.out.println("This isn't our tile entity!");
+								System.out.println("This isn't our tile entity!");
 								//return;
 							}
 						}
@@ -362,11 +375,11 @@ public class MultiBlockInstantiator {
 			
 			if(te instanceof ITileEntityMultiblock)
 			{
-				if(te instanceof TileEntityMultiblockSlave)
+				if(te instanceof ITileEntityMultiblockSlave)
 				{
 					if(worldObj.getBlock(x, y, z) != null)
 					{
-						((TileEntityMultiblockSlave) te).setMaster(null);
+						((ITileEntityMultiblockSlave) te).setMaster(null);
 					}
 				}
 				else
@@ -412,9 +425,9 @@ public class MultiBlockInstantiator {
 				for(int k=0; k<mbMatch.getPattern()[0][0].length;k++)
 				{
 					TileEntity te = world.getTileEntity(i+startX, j+startY, k+startZ);
-					TileEntityMultiblockSlave ste = null;
-					if(te instanceof TileEntityMultiblockSlave)
-						ste = (TileEntityMultiblockSlave) te;
+					ITileEntityMultiblockSlave ste = null;
+					if(te instanceof ITileEntityMultiblockSlave)
+						ste = (ITileEntityMultiblockSlave) te;
 					
 					//if(!world.isAirBlock(i+startX, j+startY, k+startZ))
 					{

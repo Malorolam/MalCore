@@ -10,17 +10,17 @@ import net.minecraft.nbt.NBTTagCompound;
 public class MultiblockWorkQueueItem {
 
 	public ItemStack input;//input item
-	public float fuelTick;//amount of fuel per tick it takes to complete the job
+	public int fuelCost;//amount of fuel required to complete the job
 	public int cookTime;//amount of tick it takes to complete the job
 	public int maxCookTime;//maximum time to complete a job
 	public int slagYield;//the amount of specific slag (in millibuckets) the item yields
 	public String oreSlagType;//the kind of slag produced
 	public boolean processing = true;
 	
-	public MultiblockWorkQueueItem(ItemStack input, float fuelTick, int cookTime, int maxCookTime, String oreSlagType, int oreSlagYield)
+	public MultiblockWorkQueueItem(ItemStack input, int fuelCost, int cookTime, int maxCookTime, String oreSlagType, int oreSlagYield)
 	{
 		this.input = input;
-		this.fuelTick = fuelTick;
+		this.fuelCost = fuelCost;
 		this.cookTime = cookTime;
 		this.maxCookTime = maxCookTime;
 		this.oreSlagType = oreSlagType;
@@ -34,7 +34,7 @@ public class MultiblockWorkQueueItem {
 	
 	public void generateNBT(NBTTagCompound nbt)
 	{
-		nbt.setFloat("fuelTick", fuelTick);
+		nbt.setInteger("fuelCost", fuelCost);
 		nbt.setInteger("cookTime", cookTime);
 		nbt.setInteger("maxCookTime", maxCookTime);
 		nbt.setString("type", oreSlagType);
@@ -45,12 +45,12 @@ public class MultiblockWorkQueueItem {
 	
 	public void retreiveNBT(NBTTagCompound nbt)
 	{
-		this.fuelTick = nbt.getFloat("fuelTick");
+		this.fuelCost = nbt.getInteger("fuelCost");
 		this.cookTime = nbt.getInteger("cookTime");
 		this.maxCookTime = nbt.getInteger("maxCookTime");
 		this.oreSlagType = nbt.getString("type");
 		this.slagYield = nbt.getInteger("slagYield");
-		input.readFromNBT(nbt);
+		input = ItemStack.loadItemStackFromNBT(nbt);
 		//System.out.println("Recovered Item: "+ input.toString() + " (" + cookTime + "/" + maxCookTime + ")");
 	}
 	
