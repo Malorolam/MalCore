@@ -1,10 +1,9 @@
 package mal.core.reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import mal.carbonization.carbonization;
-import mal.carbonization.item.ItemFuelPotentialBucket;
 import mal.core.api.IFuelContainer;
 import mal.core.api.ITieredItem;
+import mal.core.item.ItemFuelPotentialBucket;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.material.Material;
@@ -28,24 +27,6 @@ import net.minecraft.world.World;
  * A bunch of random methods that I use a lot
  */
 public class UtilReference {
-
-	public static boolean compareStacks(ItemStack stack1, ItemStack stack2, boolean useNBT)
-	{
-		if(stack1==null || stack2==null)//null stacks
-			return false;
-		if(!stack1.isItemEqual(stack2))//the items are different
-			return false;
-		
-		if(useNBT)
-		{
-			if((stack1.getTagCompound() == null) && (stack2.getTagCompound()==null))//both don't have nbt data
-				return true;
-			if((stack1.getTagCompound() == null) || (stack2.getTagCompound()==null))//one doesn't have nbt data
-				return false;
-			return stack1.getTagCompound().equals(stack2.getTagCompound());//tag compounds are the same
-		}
-		return true;
-	}
 	
 	/**
 	 * For some reason it doesn't like it when value==0.... whatever
@@ -79,7 +60,7 @@ public class UtilReference {
         }
 		else if(par0ItemStack.getItem() instanceof ItemFuelPotentialBucket)
 		{
-			return 1000*carbonization.FPUNITVALUE;
+			return 1000;
 		}
 		else
 		{
@@ -191,6 +172,7 @@ public class UtilReference {
         return par1ItemStack;
     }
     
+    //mystical magical helper method....
     private static ItemStack func_102014_c(IInventory par0IInventory, ItemStack par1ItemStack, int par2, int par3)
     {
         ItemStack itemstack1 = par0IInventory.getStackInSlot(par2);

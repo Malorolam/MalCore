@@ -2,30 +2,29 @@ package mal.core.item;
 
 import java.util.List;
 
-import mal.core.MalCore;
 import mal.core.reference.ColorReference;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
-public class ItemGuidebook extends Item{
+public class ItemFuelPotentialBucket extends ItemBucket {
 
-	public ItemGuidebook()
-	{
-		super();
-		setUnlocalizedName("guidebook");
-		maxStackSize = 1;
-		this.setCreativeTab(CreativeTabs.tabTools);
+	public ItemFuelPotentialBucket(Block p_i45331_1_) {
+		super(p_i45331_1_);
+		
+		setUnlocalizedName("fpbucket");
+		setContainerItem(Items.bucket);
+		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
-	
+
 	public void addInformation(ItemStack is, EntityPlayer ep, List list, boolean bool)
 	{
-		//find the right metadata value, currently doesn't do anything, since there is no metadata
-		list.add(setTooltipData("A collection of useful", ColorReference.LIGHTRED));
-		list.add(setTooltipData("information for Mal's mods.", ColorReference.LIGHTRED));
+		list.add(setTooltipData("A bucket of potential fuel.",ColorReference.DARKGREY));
+		list.add(setTooltipData("It smells rather terrible.", ColorReference.DARKGREY));
 	}
 	
 	//The tool tip information
@@ -36,20 +35,10 @@ public class ItemGuidebook extends Item{
 		return colorValue+data;
 	}
 	
-	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player)
-	{
-		if(world.isRemote)
-		{
-			player.openGui(MalCore.malcoreInstance, 4, world, 0, 0, 0);
-		}
-		
-		return is;
-	}
-	
 	@Override
 	public void registerIcons(IIconRegister ir)
 	{
-		this.itemIcon = ir.registerIcon("malcore:guidebookTexture");
+		this.itemIcon = ir.registerIcon("carbonization:fuelPotentialBucketTexture");
 	}
 }
 /*******************************************************************************

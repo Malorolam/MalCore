@@ -1,2 +1,13 @@
 
 item.guidebook.name=Guidebook
+
+#Guidebook pages
+# mal.page indicate that it's a guidebook page
+# .test is a one-word internal title for the page
+# .title/upper/lower refers to the element on the page
+mal.page.test.title=Test Page
+mal.page.test.upper=This is a test page, we're making some lines here, HUGE SUCCESS?  It's hard to overcome openGL states... MalCore Industries, we code what we want because we can.  For the good of all the snacks, lunchtime is fun.
+mal.page.test.lower=All my text brings the boys to the yard, and they're like "It's better than yours."  If you want to learn I'd have to charge in snacks.
+
+mal.page.intro.title=Guidebook Introduction
+mal.page.intro.lower=This is the guidebook for all of my mods.  If MalCore is all you have installed then the only page will be this one.  The next button will progress the page once forward, with the prev button progressing the page once backwards.  The x button closes the gui, as well as the esc key.  

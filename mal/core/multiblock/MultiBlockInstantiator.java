@@ -5,10 +5,10 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
-import mal.carbonization.tileentity.TileEntityMultiblockInit;
 import mal.core.api.ITieredItem;
 import mal.core.api.ITileEntityMultiblock;
 import mal.core.reference.UtilReference;
+import mal.core.tileentity.ITileEntityMultiblockInit;
 import mal.core.tileentity.ITileEntityMultiblockSlave;
 import mal.core.tileentity.TileEntityMultiblockMaster;
 import mal.core.util.MalLogger;
@@ -337,8 +337,8 @@ public class MultiBlockInstantiator {
 										((TileEntityMultiblockMaster)te).dumpInventory();//dump the inventories out
 										worldObj.setBlock(xCoord, yCoord, zCoord, masterBlock, 0, 3);
 						    			TileEntity tte = worldObj.getTileEntity(xCoord, yCoord, zCoord);
-						    			if(tte instanceof TileEntityMultiblockInit)
-						    				((TileEntityMultiblockInit) tte).initData(((TileEntityMultiblockMaster) te).getXSize(), ((TileEntityMultiblockMaster) te).getYSize(), ((TileEntityMultiblockMaster) te).getZSize(), offset, ((TileEntityMultiblockMaster)te).getType());
+						    			if(tte instanceof ITileEntityMultiblockInit)
+						    				((ITileEntityMultiblockInit) tte).initData(((TileEntityMultiblockMaster) te).getXSize(), ((TileEntityMultiblockMaster) te).getYSize(), ((TileEntityMultiblockMaster) te).getZSize(), offset, ((TileEntityMultiblockMaster)te).getType());
 						    			else if (tte instanceof ITileEntityMultiblockSlave)
 						    				System.out.println("wat...");
 						    			else
@@ -346,7 +346,7 @@ public class MultiBlockInstantiator {
 						    				//System.out.println("dafuq...");
 						    				worldObj.setTileEntity(xCoord, yCoord, zCoord, masterBlock.createTileEntity(worldObj, 0));
 							    			tte = worldObj.getTileEntity(xCoord, yCoord, zCoord);
-						    				((TileEntityMultiblockInit) tte).initData(((TileEntityMultiblockMaster) te).getXSize(), ((TileEntityMultiblockMaster) te).getYSize(), ((TileEntityMultiblockMaster) te).getZSize(), offset, ((TileEntityMultiblockMaster)te).getType());
+						    				((ITileEntityMultiblockInit) tte).initData(((TileEntityMultiblockMaster) te).getXSize(), ((TileEntityMultiblockMaster) te).getYSize(), ((TileEntityMultiblockMaster) te).getZSize(), offset, ((TileEntityMultiblockMaster)te).getType());
 						    			}
 									}
 								}

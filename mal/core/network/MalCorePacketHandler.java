@@ -1,7 +1,5 @@
 package mal.core.network;
 
-import mal.carbonization.network.MultiblockInitMessage;
-import mal.carbonization.tileentity.TileEntityMultiblockInit;
 import mal.core.MalCore;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;

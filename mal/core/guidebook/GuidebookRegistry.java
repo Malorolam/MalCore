@@ -1,4 +1,4 @@
-package mal.core;
+package mal.core.guidebook;
 
 import java.util.ArrayList;
 

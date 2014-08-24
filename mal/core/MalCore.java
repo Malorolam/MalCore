@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import mal.core.guidebook.GuidebookPage;
+import mal.core.guidebook.GuidebookRegistry;
 import mal.core.item.ItemGuidebook;
 import mal.core.network.CommonProxy;
 import mal.core.network.MalCorePacketHandler;
@@ -26,7 +28,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @Mod(modid = MalCore.MODID, version = MalCore.VERSION)
 public class MalCore {
     public static final String MODID = "MalCore";
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.1.5";
     public static final String VersionURL = "https://www.dropbox.com/s/ao6p1iye6w2suec/malcoreVersion.info?dl=1";
 	public static boolean VERBOSEMODE = true;
 	
@@ -53,9 +55,17 @@ public class MalCore {
     @EventHandler
     public void Init(FMLInitializationEvent event)
     {
-    	GuidebookPage page = new GuidebookPage("Guidebook Introduction", "This is the guidebook for all of my mods.  If MalCore is all you have installed " +
-    			"then the only page will be this one.  The next button will progress the page once forward, with the prev button progressing the " +
-    			"page once backwards.  The x button closes the gui, as well as the esc key.  ");
+/*    	GuidebookPage test = new GuidebookPage("mal.page.test.title", "mal.page.test.lower",
+    			"mal.page.test.upper", new ItemStack(guidebookItem), new ItemStack[]{new ItemStack(Items.apple), new ItemStack(Items.baked_potato), new ItemStack(Items.cake), new ItemStack(Items.diamond), new ItemStack(Items.egg), new ItemStack(Items.feather), new ItemStack(Items.ghast_tear), new ItemStack(Items.hopper_minecart)});
+    	GuidebookRegistry.instance.addPage(test);
+    	test = new GuidebookPage("mal.page.test.title", "mal.page.test.lower",
+    			"mal.page.test.upper", new ItemStack(guidebookItem), null);
+    	GuidebookRegistry.instance.addPage(test);
+    	test = new GuidebookPage("mal.page.test.title", "mal.page.test.lower",
+    			"mal.page.test.upper");
+    	GuidebookRegistry.instance.addPage(test);*/
+    	
+    	GuidebookPage page = new GuidebookPage("mal.page.intro.title", "mal.page.intro.lower");
     	GuidebookRegistry.instance.addPage(page);
     	
     	CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(guidebookItem), new Object[]{Items.book, new ItemStack(Items.coal,1,0)}));
